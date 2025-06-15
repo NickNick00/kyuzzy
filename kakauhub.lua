@@ -468,6 +468,54 @@ end)())
 -- ========== PODERES ==========
 makeHeader("Poderes","Poderes")
 
+local bleakGunBlockActive = false
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local function bloquearTiros(enable)
+    if enable then
+        for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
+            if obj:IsA("RemoteEvent") and obj.Name:lower():find("gun") then
+                obj.OnServerEvent:Connect(function()
+                    return -- Bloqueia o evento, impedindo os tiros
+                end)
+            end
+        end
+    end
+end
+
+makeRow("Poderes", "Bloquear BleakGun:", (function()
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 150, 0, 32)
+    btn.BackgroundColor3 = Color3.fromRGB(180, 60, 60)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 15
+    btn.Text = "Ativar Bloqueio"
+    addCorner(btn, 8)
+    
+    btn.MouseButton1Click:Connect(function()
+        bleakGunBlockActive = not bleakGunBlockActive
+        if bleakGunBlockActive then
+            btn.Text = "Desativar Bloqueio"
+            bloquearTiros(true)
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "BleakGun Block",
+                Text = "BleakGun bloqueado. Jogadores não podem atirar.",
+                Duration = 3,
+            })
+        else
+            btn.Text = "Ativar Bloqueio"
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "BleakGun Block",
+                Text = "BleakGun desbloqueado. Jogadores podem atirar novamente.",
+                Duration = 3,
+            })
+        end
+    end)
+    
+    return btn
+end)())
+
 makeRow("Poderes", "Kill Aura MM2:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 150, 0, 32)
