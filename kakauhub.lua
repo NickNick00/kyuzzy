@@ -468,6 +468,37 @@ end)())
 -- ========== PODERES ==========
 makeHeader("Poderes","Poderes")
 
+makeRow("Poderes", "Kill Aura MM2:", (function()
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 150, 0, 32)
+    btn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 15
+    btn.Text = "Ativar Kill Aura"
+    addCorner(btn, 8)
+    btn.MouseButton1Click:Connect(function()
+        killAuraActive = not killAuraActive
+        if killAuraActive then
+            btn.Text = "Desativar Kill Aura"
+            if not isMurder() then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Kill Aura",
+                    Text = "Você não é o Murder ou não possui a faca equipada.",
+                    Duration = 3,
+                })
+                killAuraActive = false
+                btn.Text = "Ativar Kill Aura"
+                return
+            end
+            spawn(function() killAuraLoop() end)
+        else
+            btn.Text = "Ativar Kill Aura"
+        end
+    end)
+    return btn
+end)())
+
 -- Kill Aura MM2
 local killAuraActive = false
 
