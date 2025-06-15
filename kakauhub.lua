@@ -472,13 +472,14 @@ local bleakGunBlockActive = false
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local function bloquearTiros(enable)
-    if enable then
-        for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
-            if obj:IsA("RemoteEvent") and obj.Name:lower():find("gun") then
-                obj.OnServerEvent:Connect(function()
-                    return -- Bloqueia o evento, impedindo os tiros
-                end)
-            end
+    for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
+        if obj:IsA("RemoteEvent") and obj.Name:lower():find("shoot") then
+            obj.OnServerEvent:Connect(function(player)
+                if enable then
+                    warn(player.Name .. " tentou atirar, mas foi bloqueado!")
+                    return -- Interrompe o evento, impedindo o tiro
+                end
+            end)
         end
     end
 end
@@ -492,7 +493,7 @@ makeRow("Poderes", "Bloquear BleakGun:", (function()
     btn.TextSize = 15
     btn.Text = "Ativar Bloqueio"
     addCorner(btn, 8)
-    
+
     btn.MouseButton1Click:Connect(function()
         bleakGunBlockActive = not bleakGunBlockActive
         if bleakGunBlockActive then
@@ -505,6 +506,7 @@ makeRow("Poderes", "Bloquear BleakGun:", (function()
             })
         else
             btn.Text = "Ativar Bloqueio"
+            bloquearTiros(false)
             game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "BleakGun Block",
                 Text = "BleakGun desbloqueado. Jogadores podem atirar novamente.",
@@ -512,7 +514,7 @@ makeRow("Poderes", "Bloquear BleakGun:", (function()
             })
         end
     end)
-    
+
     return btn
 end)())
 
