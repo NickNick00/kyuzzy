@@ -2,14 +2,13 @@
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
 local settingsData = { hubTheme = "escuro", confirmOnClose = false }
-
 local function saveSettings()
     local folder = PlayerGui:FindFirstChild("kakauHubSettings") or Instance.new("Folder", PlayerGui)
     folder.Name = "kakauHubSettings"
@@ -52,12 +51,13 @@ local TabFrames = {}
 
 local function makeHeader(tab, text)
     local header = Instance.new("TextLabel")
-    header.Size = UDim2.new(1, -20, 0, 30)
+    header.Size = UDim2.new(1, -20, 0, 28)
+    header.Position = UDim2.new(0, 10, 0, 0)
     header.BackgroundTransparency = 1
     header.Text = text
     header.Font = Enum.Font.GothamBold
-    header.TextColor3 = Color3.fromRGB(255, 255, 255)
-    header.TextSize = 18
+    header.TextColor3 = Color3.fromRGB(255,60,60)
+    header.TextSize = 19
     header.TextXAlignment = Enum.TextXAlignment.Left
     header.Parent = TabFrames[tab]
 end
@@ -77,11 +77,11 @@ local function makeRow(tab, labelText, control)
     layout.Parent = row
 
     local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0, 140, 1, 0)
+    label.Size = UDim2.new(0, 130, 1, 0)
     label.BackgroundTransparency = 1
     label.Text = labelText
     label.Font = Enum.Font.Gotham
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextColor3 = Color3.fromRGB(255,255,255)
     label.TextSize = 15
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Parent = row
@@ -357,19 +357,19 @@ local function setXrayEnemies(val)
     end
 end
 
-local function criarBotao(nome, corOn, corOff, txtOn, txtOff, getState, setState)
+local function criarBotao(text, cor, txtOn, txtOff, getState, setState)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 160, 0, 36)
-    btn.BackgroundColor3 = getState() and corOn or corOff
-    btn.TextColor3 = Color3.new(1, 1, 1)
-    btn.Font = Enum.Font.GothamBold
-    btn.TextSize = 15
+    btn.Size = UDim2.new(0, 150, 0, 32)
+    btn.BackgroundColor3 = cor
+    btn.BackgroundTransparency = 0.2
     btn.Text = getState() and txtOn or txtOff
+    btn.Font = Enum.Font.GothamBold
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.TextSize = 15
     addCorner(btn, 8)
     btn.MouseButton1Click:Connect(function()
         setState(not getState())
         btn.Text = getState() and txtOn or txtOff
-        btn.BackgroundColor3 = getState() and corOn or corOff
     end)
     return btn
 end
@@ -466,8 +466,7 @@ end)())
 
 --------------------------------------------------
 -- ========== PODERES ==========
-makeHeader("Poderes","✦Poderes")
-
+makeHeader("Poderes","Poderes")
 
 local bleakGunBlockActive = false
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -788,16 +787,54 @@ local function setNoclip(enabled)
         end
     end
 end
-
+local function startFly()
+    if flyConn then flyConn:Disconnect() flyConn = nil end
+    local char = player.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") or not char:FindFirstChild("Humanoid") then return end
+    local hrp = char.HumanoidRootPart
+    local humanoid = char.Humanoid
+    humanoid.PlatformStand = true
+    flyConn = RunService.RenderStepped:Connect(function()
+        if not flyActive then return end
+        local camCF = workspace.CurrentCamera.CFrame
+        local move = humanoid.MoveDirection
+        if move.Magnitude > 0 then
+            local camRight = camCF.RightVector
+            local camLook = camCF.LookVector
+            local input = Vector3.new(move.X, 0, move.Z)
+            local camForward = Vector3.new(camLook.X, 0, camLook.Z).Unit
+            local moveDir = (camRight * input.X + camForward * input.Z)
+            local vertical = camLook.Y * input.Z
+            local final = Vector3.new(moveDir.X, vertical, moveDir.Z)
+            if final.Magnitude > 0 then
+                hrp.Velocity = final.Unit * flySpeed
+                hrp.CFrame = CFrame.new(hrp.Position, hrp.Position + camCF.LookVector)
+            else
+                hrp.Velocity = Vector3.zero
+            end
+        else
+            hrp.Velocity = Vector3.zero
+        end
+    end)
+end
+local function stopFly()
+    flyActive = false
+    if flyConn then flyConn:Disconnect() flyConn = nil end
+    local char = player.Character
+    if char and char:FindFirstChild("Humanoid") then
+        char.Humanoid.PlatformStand = false
+    end
+end
 
 -- Cada função em uma linha (funções em coluna)
 makeRow("Poderes", "God (Imortal):",
-    criarBotao("God", Color3.fromRGB(60,200,60), Color3.fromRGB(200,60,60), "God Ativado", "God Desativado", 
-    function() return godActive end, function(v) godActive = v; setGod(v) end)
+    criarBotao("God", Color3.fromRGB(60,200,60), "Desativar God", "Ativar God", function() return godActive end, function(v) godActive = v; setGod(v) end)
 )
 makeRow("Poderes", "Noclip:",
-    criarBotao("Noclip", Color3.fromRGB(60,180,250), Color3.fromRGB(200,80,80), "Noclip Ativado", "Noclip Desativado",
-    function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
+    criarBotao("Noclip", Color3.fromRGB(180,120,255), "Desativar Noclip", "Ativar Noclip", function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
+)
+makeRow("Poderes", "Fly (InfiniteYield):",
+    criarBotao("Fly", Color3.fromRGB(60,60,160), "Desativar Fly", "Ativar Fly", function() return flyActive end, function(v) flyActive = v; if v then startFly() else stopFly() end end)
 )
 
 makeRow("Poderes", "Velocidade:", (function()
@@ -1195,6 +1232,68 @@ makeRow("Poderes", "TP Lobby:", (function()
     btn.Text = "TP para Lobby"
     addCorner(btn, 8)
     btn.MouseButton1Click:Connect(tpToLobby)
+    return btn
+end)())
+
+-- TP Mapa
+local function tpToMap()
+    local map = nil
+    for _,obj in ipairs(workspace:GetChildren()) do
+        if obj:IsA("Model") and obj.Name ~= "Lobby" and not Players:FindFirstChild(obj.Name) and obj.Name ~= "Camera" and obj.Name ~= "Lobby2" then
+            if obj:FindFirstChildWhichIsA("BasePart") then
+                map = obj
+                break
+            end
+        end
+    end
+    local pos = nil
+    if map then
+        for _,v in ipairs(map:GetDescendants()) do
+            if v:IsA("BasePart") and v.Name:lower():find("spawn") then
+                pos = v.CFrame
+                break
+            end
+        end
+        if not pos and map.PrimaryPart then
+            pos = map.PrimaryPart.CFrame
+        elseif not pos then
+            local parts = {}
+            for _,v in ipairs(map:GetDescendants()) do
+                if v:IsA("BasePart") then table.insert(parts, v.Position) end
+            end
+            if #parts > 0 then
+                local sum = Vector3.new(0,0,0)
+                for _,v in ipairs(parts) do sum = sum + v end
+                pos = CFrame.new(sum/#parts)
+            end
+        end
+    end
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and pos then
+        player.Character.HumanoidRootPart.CFrame = pos + Vector3.new(0,2,0)
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "TP",
+            Text = "Teleportado para o Mapa!",
+            Duration = 3,
+        })
+    else
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "TP",
+            Text = "Mapa não encontrado.",
+            Duration = 3,
+        })
+    end
+end
+
+makeRow("Poderes", "TP Mapa:", (function()
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 180, 0, 32)
+    btn.BackgroundColor3 = Color3.fromRGB(80,220,100)
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 15
+    btn.Text = "TP para Mapa"
+    addCorner(btn, 8)
+    btn.MouseButton1Click:Connect(tpToMap)
     return btn
 end)())
 
