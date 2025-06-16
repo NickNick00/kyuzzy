@@ -2,13 +2,14 @@
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
 local settingsData = { hubTheme = "escuro", confirmOnClose = false }
+
 local function saveSettings()
     local folder = PlayerGui:FindFirstChild("kakauHubSettings") or Instance.new("Folder", PlayerGui)
     folder.Name = "kakauHubSettings"
@@ -51,13 +52,12 @@ local TabFrames = {}
 
 local function makeHeader(tab, text)
     local header = Instance.new("TextLabel")
-    header.Size = UDim2.new(1, -20, 0, 28)
-    header.Position = UDim2.new(0, 10, 0, 0)
+    header.Size = UDim2.new(1, -20, 0, 30)
     header.BackgroundTransparency = 1
     header.Text = text
     header.Font = Enum.Font.GothamBold
-    header.TextColor3 = Color3.fromRGB(255,60,60)
-    header.TextSize = 19
+    header.TextColor3 = Color3.fromRGB(255, 255, 255)
+    header.TextSize = 18
     header.TextXAlignment = Enum.TextXAlignment.Left
     header.Parent = TabFrames[tab]
 end
@@ -77,11 +77,11 @@ local function makeRow(tab, labelText, control)
     layout.Parent = row
 
     local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0, 130, 1, 0)
+    label.Size = UDim2.new(0, 140, 1, 0)
     label.BackgroundTransparency = 1
     label.Text = labelText
     label.Font = Enum.Font.Gotham
-    label.TextColor3 = Color3.fromRGB(255,255,255)
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.TextSize = 15
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Parent = row
@@ -357,19 +357,19 @@ local function setXrayEnemies(val)
     end
 end
 
-local function criarBotao(text, cor, txtOn, txtOff, getState, setState)
+local function criarBotao(nome, corOn, corOff, txtOn, txtOff, getState, setState)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 150, 0, 32)
-    btn.BackgroundColor3 = cor
-    btn.BackgroundTransparency = 0.2
-    btn.Text = getState() and txtOn or txtOff
+    btn.Size = UDim2.new(0, 160, 0, 36)
+    btn.BackgroundColor3 = getState() and corOn or corOff
+    btn.TextColor3 = Color3.new(1, 1, 1)
     btn.Font = Enum.Font.GothamBold
-    btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.TextSize = 15
+    btn.Text = getState() and txtOn or txtOff
     addCorner(btn, 8)
     btn.MouseButton1Click:Connect(function()
         setState(not getState())
         btn.Text = getState() and txtOn or txtOff
+        btn.BackgroundColor3 = getState() and corOn or corOff
     end)
     return btn
 end
@@ -466,7 +466,7 @@ end)())
 
 --------------------------------------------------
 -- ========== PODERES ==========
-makeHeader("Poderes","Poderes")
+makeHeader("Poderes","✦Poderes")
 
 
 local bleakGunBlockActive = false
@@ -792,12 +792,13 @@ end
 
 -- Cada função em uma linha (funções em coluna)
 makeRow("Poderes", "God (Imortal):",
-    criarBotao("God", Color3.fromRGB(60,200,60), "Desativar God", "Ativar God", function() return godActive end, function(v) godActive = v; setGod(v) end)
+    criarBotao("God", Color3.fromRGB(60,200,60), Color3.fromRGB(200,60,60), "God Ativado", "God Desativado", 
+    function() return godActive end, function(v) godActive = v; setGod(v) end)
 )
 makeRow("Poderes", "Noclip:",
-    criarBotao("Noclip", Color3.fromRGB(180,120,255), "Desativar Noclip", "Ativar Noclip", function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
+    criarBotao("Noclip", Color3.fromRGB(60,180,250), Color3.fromRGB(200,80,80), "Noclip Ativado", "Noclip Desativado",
+    function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
 )
-
 
 makeRow("Poderes", "Velocidade:", (function()
     local frame = Instance.new("Frame")
