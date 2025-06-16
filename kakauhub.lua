@@ -468,41 +468,6 @@ end)())
 -- ========== PODERES ==========
 makeHeader("Poderes","Poderes")
 
-local flyTiltEnabled = false
-local tiltAmount = 15 -- Ângulo máximo de inclinação
-local tiltSpeed = 0.2 -- Velocidade de transição da inclinação
-local tiltTween = nil
-
-local function updateFlyTilt()
-    if not flyActive then return end
-    local char = player.Character
-    if not char or not char:FindFirstChild("HumanoidRootPart") or not char:FindFirstChild("Humanoid") then return end
-
-    local hrp = char.HumanoidRootPart
-    local moveDir = char.Humanoid.MoveDirection
-    local camLook = workspace.CurrentCamera.CFrame.LookVector
-
-    -- Define a inclinação baseado na direção do movimento
-    local forwardTilt = moveDir.Z * tiltAmount
-    local sideTilt = moveDir.X * tiltAmount * 0.5
-    local targetRotation = CFrame.Angles(math.rad(-forwardTilt), 0, math.rad(-sideTilt))
-
-    -- Aplica suavemente a rotação ao personagem
-    if tiltTween then tiltTween:Cancel() end
-    tiltTween = TweenService:Create(hrp, TweenInfo.new(tiltSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = hrp.CFrame * targetRotation})
-    tiltTween:Play()
-end
-
-local function setFlyTilt(enabled)
-    flyTiltEnabled = enabled
-    if enabled then
-        RunService.RenderStepped:Connect(updateFlyTilt)
-    end
-end
-
-makeRow("Poderes", "Tilt + Rotação no Fly:",
-    criarBotao("FlyTilt", Color3.fromRGB(60,120,250), "Desativar Tilt", "Ativar Tilt", function() return flyTiltEnabled end, function(v) setFlyTilt(v) end)
-)
 
 local bleakGunBlockActive = false
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -823,44 +788,7 @@ local function setNoclip(enabled)
         end
     end
 end
-local function startFly()
-    if flyConn then flyConn:Disconnect() flyConn = nil end
-    local char = player.Character
-    if not char or not char:FindFirstChild("HumanoidRootPart") or not char:FindFirstChild("Humanoid") then return end
-    local hrp = char.HumanoidRootPart
-    local humanoid = char.Humanoid
-    humanoid.PlatformStand = true
-    flyConn = RunService.RenderStepped:Connect(function()
-        if not flyActive then return end
-        local camCF = workspace.CurrentCamera.CFrame
-        local move = humanoid.MoveDirection
-        if move.Magnitude > 0 then
-            local camRight = camCF.RightVector
-            local camLook = camCF.LookVector
-            local input = Vector3.new(move.X, 0, move.Z)
-            local camForward = Vector3.new(camLook.X, 0, camLook.Z).Unit
-            local moveDir = (camRight * input.X + camForward * input.Z)
-            local vertical = camLook.Y * input.Z
-            local final = Vector3.new(moveDir.X, vertical, moveDir.Z)
-            if final.Magnitude > 0 then
-                hrp.Velocity = final.Unit * flySpeed
-                hrp.CFrame = CFrame.new(hrp.Position, hrp.Position + camCF.LookVector)
-            else
-                hrp.Velocity = Vector3.zero
-            end
-        else
-            hrp.Velocity = Vector3.zero
-        end
-    end)
-end
-local function stopFly()
-    flyActive = false
-    if flyConn then flyConn:Disconnect() flyConn = nil end
-    local char = player.Character
-    if char and char:FindFirstChild("Humanoid") then
-        char.Humanoid.PlatformStand = false
-    end
-end
+
 
 -- Cada função em uma linha (funções em coluna)
 makeRow("Poderes", "God (Imortal):",
@@ -869,9 +797,7 @@ makeRow("Poderes", "God (Imortal):",
 makeRow("Poderes", "Noclip:",
     criarBotao("Noclip", Color3.fromRGB(180,120,255), "Desativar Noclip", "Ativar Noclip", function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
 )
-makeRow("Poderes", "Fly (InfiniteYield):",
-    criarBotao("Fly", Color3.fromRGB(60,60,160), "Desativar Fly", "Ativar Fly", function() return flyActive end, function(v) flyActive = v; if v then startFly() else stopFly() end end)
-)
+
 
 makeRow("Poderes", "Velocidade:", (function()
     local frame = Instance.new("Frame")
@@ -1268,68 +1194,6 @@ makeRow("Poderes", "TP Lobby:", (function()
     btn.Text = "TP para Lobby"
     addCorner(btn, 8)
     btn.MouseButton1Click:Connect(tpToLobby)
-    return btn
-end)())
-
--- TP Mapa
-local function tpToMap()
-    local map = nil
-    for _,obj in ipairs(workspace:GetChildren()) do
-        if obj:IsA("Model") and obj.Name ~= "Lobby" and not Players:FindFirstChild(obj.Name) and obj.Name ~= "Camera" and obj.Name ~= "Lobby2" then
-            if obj:FindFirstChildWhichIsA("BasePart") then
-                map = obj
-                break
-            end
-        end
-    end
-    local pos = nil
-    if map then
-        for _,v in ipairs(map:GetDescendants()) do
-            if v:IsA("BasePart") and v.Name:lower():find("spawn") then
-                pos = v.CFrame
-                break
-            end
-        end
-        if not pos and map.PrimaryPart then
-            pos = map.PrimaryPart.CFrame
-        elseif not pos then
-            local parts = {}
-            for _,v in ipairs(map:GetDescendants()) do
-                if v:IsA("BasePart") then table.insert(parts, v.Position) end
-            end
-            if #parts > 0 then
-                local sum = Vector3.new(0,0,0)
-                for _,v in ipairs(parts) do sum = sum + v end
-                pos = CFrame.new(sum/#parts)
-            end
-        end
-    end
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and pos then
-        player.Character.HumanoidRootPart.CFrame = pos + Vector3.new(0,2,0)
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "TP",
-            Text = "Teleportado para o Mapa!",
-            Duration = 3,
-        })
-    else
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "TP",
-            Text = "Mapa não encontrado.",
-            Duration = 3,
-        })
-    end
-end
-
-makeRow("Poderes", "TP Mapa:", (function()
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 180, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(80,220,100)
-    btn.TextColor3 = Color3.fromRGB(255,255,255)
-    btn.Font = Enum.Font.GothamBold
-    btn.TextSize = 15
-    btn.Text = "TP para Mapa"
-    addCorner(btn, 8)
-    btn.MouseButton1Click:Connect(tpToMap)
     return btn
 end)())
 
