@@ -468,6 +468,42 @@ end)())
 -- ========== PODERES ==========
 makeHeader("Poderes","Poderes")
 
+local flyTiltEnabled = false
+local tiltAmount = 15 -- Ângulo máximo de inclinação
+local tiltSpeed = 0.2 -- Velocidade de transição da inclinação
+local tiltTween = nil
+
+local function updateFlyTilt()
+    if not flyActive then return end
+    local char = player.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") or not char:FindFirstChild("Humanoid") then return end
+
+    local hrp = char.HumanoidRootPart
+    local moveDir = char.Humanoid.MoveDirection
+    local camLook = workspace.CurrentCamera.CFrame.LookVector
+
+    -- Define a inclinação baseado na direção do movimento
+    local forwardTilt = moveDir.Z * tiltAmount
+    local sideTilt = moveDir.X * tiltAmount * 0.5
+    local targetRotation = CFrame.Angles(math.rad(-forwardTilt), 0, math.rad(-sideTilt))
+
+    -- Aplica suavemente a rotação ao personagem
+    if tiltTween then tiltTween:Cancel() end
+    tiltTween = TweenService:Create(hrp, TweenInfo.new(tiltSpeed, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = hrp.CFrame * targetRotation})
+    tiltTween:Play()
+end
+
+local function setFlyTilt(enabled)
+    flyTiltEnabled = enabled
+    if enabled then
+        RunService.RenderStepped:Connect(updateFlyTilt)
+    end
+end
+
+makeRow("Poderes", "Tilt + Rotação no Fly:",
+    criarBotao("FlyTilt", Color3.fromRGB(60,120,250), "Desativar Tilt", "Ativar Tilt", function() return flyTiltEnabled end, function(v) setFlyTilt(v) end)
+)
+
 local bleakGunBlockActive = false
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
