@@ -753,7 +753,7 @@ makeRow("Poderes", "Fling Player:", (function()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 200, 0, 34)
     frame.BackgroundTransparency = 1
-    local box = Instance.new("TextBox")
+    local box = Instance.new("criarDropdownPlayer")
     box.Size = UDim2.new(0, 100, 0, 30)
     box.BackgroundColor3 = Color3.fromRGB(255,0,0)
     box.TextColor3 = Color3.fromRGB(255,255,255)
@@ -1107,7 +1107,7 @@ makeRow("Poderes", "TP Player:", (function()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 200, 0, 34)
     frame.BackgroundTransparency = 1
-    local tpPlayerBox = Instance.new("TextBox")
+    local tpPlayerBox = Instance.new("criarDropdownPlayer")
     tpPlayerBox.Size = UDim2.new(0, 100, 0, 30)
     tpPlayerBox.BackgroundColor3 = Color3.fromRGB(255,0,0)
     tpPlayerBox.TextColor3 = Color3.fromRGB(255,255,255)
@@ -1138,7 +1138,7 @@ makeRow("Poderes", "Kill Player:", (function()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 220, 0, 34)
     frame.BackgroundTransparency = 1
-    local killBox = Instance.new("TextBox")
+    local killBox = Instance.new("criarDropdownPlayer")
     killBox.Size = UDim2.new(0, 100, 0, 30)
     killBox.BackgroundColor3 = Color3.fromRGB(255,5,5)
     killBox.TextColor3 = Color3.fromRGB(255,255,255)
@@ -1409,6 +1409,62 @@ pcall(function()
     })
 end)
 
+local function criarDropdownPlayer()
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 200, 0, 34)
+    frame.BackgroundTransparency = 1
+
+    local dropdown = Instance.new("TextButton")
+    dropdown.Size = UDim2.new(0, 100, 0, 30)
+    dropdown.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dropdown.Font = Enum.Font.GothamBold
+    dropdown.TextSize = 13
+    dropdown.Text = "Selecione"
+    addCorner(dropdown, 8)
+    dropdown.Parent = frame
+
+    local listaPlayers = Instance.new("Frame")
+    listaPlayers.Size = UDim2.new(0, 100, 0, 150)
+    listaPlayers.Position = UDim2.new(0, 0, 1, 5)
+    listaPlayers.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    listaPlayers.Visible = false
+    listaPlayers.Parent = frame
+    addCorner(listaPlayers, 6)
+
+    local layout = Instance.new("UIListLayout")
+    layout.Parent = listaPlayers
+
+    local function atualizarLista()
+        for _, obj in ipairs(listaPlayers:GetChildren()) do
+            if obj:IsA("TextButton") then obj:Destroy() end
+        end
+        for _, plr in ipairs(game:GetService("Players"):GetPlayers()) do
+            local btn = Instance.new("TextButton")
+            btn.Size = UDim2.new(1, 0, 0, 30)
+            btn.BackgroundTransparency = 1
+            btn.Text = plr.Name
+            btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            btn.Font = Enum.Font.GothamBold
+            btn.TextSize = 12
+            btn.Parent = listaPlayers
+            btn.MouseButton1Click:Connect(function()
+                dropdown.Text = plr.Name
+                listaPlayers.Visible = false
+            end)
+        end
+    end
+
+    dropdown.MouseButton1Click:Connect(function()
+        atualizarLista()
+        listaPlayers.Visible = not listaPlayers.Visible
+    end)
+
+    game:GetService("Players").PlayerAdded:Connect(atualizarLista)
+    game:GetService("Players").PlayerRemoving:Connect(atualizarLista)
+
+    return frame
+end
 
 task.wait(0.1)
 animateOpen()
