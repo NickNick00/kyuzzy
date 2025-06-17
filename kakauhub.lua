@@ -114,15 +114,35 @@ MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
 addCorner(MainFrame, 16)
 
+
+local TopBar = Instance.new("Frame")
+TopBar.Name = "TopBar"
+TopBar.Size = UDim2.new(1, 0, 0, 44)
+TopBar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TopBar.BackgroundTransparency = 0.35
+TopBar.BorderSizePixel = 0
+TopBar.Parent = MainFrame
+addCorner(TopBar, 15)
+
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 80, 1, 0)
-fpsLabel.Position = UDim2.new(1, -90, 0, 0) -- Ajustado para ficar ao lado do título
+fpsLabel.Position = UDim2.new(1, -90, 0, 0) -- Ao lado do título
 fpsLabel.BackgroundTransparency = 1
 fpsLabel.Font = Enum.Font.GothamBold
-fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Verde vibrante para destaque
+fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Verde vibrante
 fpsLabel.TextSize = 18
 fpsLabel.TextXAlignment = Enum.TextXAlignment.Right
 fpsLabel.Parent = TopBar
+
+local pingLabel = Instance.new("TextLabel")
+pingLabel.Size = UDim2.new(0, 80, 1, 0)
+pingLabel.Position = UDim2.new(1, -180, 0, 0) -- Ao lado do FPS
+pingLabel.BackgroundTransparency = 1
+pingLabel.Font = Enum.Font.GothamBold
+pingLabel.TextColor3 = Color3.fromRGB(0, 200, 255) -- Azul vibrante
+pingLabel.TextSize = 18
+pingLabel.TextXAlignment = Enum.TextXAlignment.Right
+pingLabel.Parent = TopBar
 
 local function updateFPS()
     local lastTime = tick()
@@ -137,35 +157,22 @@ local function updateFPS()
     end)
 end
 
-local pingLabel = Instance.new("TextLabel")
-pingLabel.Size = UDim2.new(0, 80, 1, 0)
-pingLabel.Position = UDim2.new(1, -180, 0, 0) -- Ajustado para ficar ao lado do FPS
-pingLabel.BackgroundTransparency = 1
-pingLabel.Font = Enum.Font.GothamBold
-pingLabel.TextColor3 = Color3.fromRGB(0, 200, 255) -- Azul para contraste
-pingLabel.TextSize = 18
-pingLabel.TextXAlignment = Enum.TextXAlignment.Right
-pingLabel.Parent = TopBar
-
 local function updatePing()
     while true do
-        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
-        pingLabel.Text = "Ping: " .. ping .. "ms"
+        local success, ping = pcall(function()
+            return math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+        end)
+        if success then
+            pingLabel.Text = "Ping: " .. ping .. "ms"
+        else
+            pingLabel.Text = "Ping: N/A"
+        end
         task.wait(1) -- Atualiza a cada segundo
     end
 end
 
 updateFPS()
 task.spawn(updatePing)
-
-local TopBar = Instance.new("Frame")
-TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 44)
-TopBar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-TopBar.BackgroundTransparency = 0.35
-TopBar.BorderSizePixel = 0
-TopBar.Parent = MainFrame
-addCorner(TopBar, 15)
 
 local Accent = Instance.new("Frame")
 Accent.Size = UDim2.new(1, 0, 0, 3)
