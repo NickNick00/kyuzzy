@@ -8,6 +8,14 @@ local Lighting = game:GetService("Lighting")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
+local function AtualizarCor(botao, ativo)
+    if ativo then
+        botao.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Verde para ativado
+    else
+        botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para desativado
+    end
+end
+
 local settingsData = { hubTheme = "escuro", confirmOnClose = false }
 local function saveSettings()
     local folder = PlayerGui:FindFirstChild("kakauHubSettings") or Instance.new("Folder", PlayerGui)
@@ -377,6 +385,7 @@ end
 local visuais = {
     {
         nome = "Night Vision:",
+        AtualizarCor(btn, getState()) -- Define a cor ao criar o botão
         cor = Color3.fromRGB(255,0,0),
         txtOff = "Night Vision",
         txtOn = "Normal Vision",
