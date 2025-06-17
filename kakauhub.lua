@@ -449,7 +449,7 @@ end
 makeRow("Visual","ESP MM2:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 150, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(0,180,80)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     btn.BackgroundTransparency = 0.2
     btn.Text = "Ativar ESP MM2"
     btn.Font = Enum.Font.GothamBold
@@ -652,7 +652,7 @@ local function flingAll()
 end
 
 -- Constantes para o launch
-local LAUNCH_VELOCITY = Vector3.new(0, -120, 0) -- Joga para o void. Ajuste a força se quiser
+local LAUNCH_VELOCITY = Vector3.new(0, 300, 0) -- Joga para o void. Ajuste a força se quiser
 local WALKFLING_ROT = Vector3.new(8888, 8888, 8888)
 
 local function onTouchFling(otherPart)
@@ -696,7 +696,7 @@ makeRow("Poderes", "Fling Player:", (function()
     frame.BackgroundTransparency = 1
     local box = Instance.new("TextBox")
     box.Size = UDim2.new(0, 100, 0, 30)
-    box.BackgroundColor3 = Color3.fromRGB(255,140,0)
+    box.BackgroundColor3 = Color3.fromRGB(255,0,0)
     box.TextColor3 = Color3.fromRGB(255,255,255)
     box.Font = Enum.Font.GothamBold
     box.TextSize = 13
@@ -707,7 +707,7 @@ makeRow("Poderes", "Fling Player:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 68, 0, 30)
     btn.Position = UDim2.new(0, 110, 0, 0)
-    btn.BackgroundColor3 = Color3.fromRGB(255,90,0)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 13
@@ -843,7 +843,7 @@ makeRow("Poderes", "Velocidade:", (function()
     frame.BackgroundTransparency = 1
     local speedBox = Instance.new("TextBox")
     speedBox.Size = UDim2.new(0, 90, 0, 30)
-    speedBox.BackgroundColor3 = Color3.fromRGB(40,40,80)
+    speedBox.BackgroundColor3 = Color3.fromRGB(255,0,0)
     speedBox.TextColor3 = Color3.fromRGB(255,255,255)
     speedBox.Font = Enum.Font.GothamBold
     speedBox.TextSize = 13
@@ -863,7 +863,7 @@ makeRow("Poderes", "Velocidade:", (function()
     local speedResetBtn = Instance.new("TextButton")
     speedResetBtn.Size = UDim2.new(0, 68, 0, 30)
     speedResetBtn.Position = UDim2.new(0, 100, 0, 0)
-    speedResetBtn.BackgroundColor3 = Color3.fromRGB(120,120,255)
+    speedResetBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     speedResetBtn.TextColor3 = Color3.fromRGB(255,255,255)
     speedResetBtn.Font = Enum.Font.GothamBold
     speedResetBtn.TextSize = 13
@@ -884,7 +884,7 @@ makeRow("Poderes", "Pulo:", (function()
     frame.BackgroundTransparency = 1
     local jumpBox = Instance.new("TextBox")
     jumpBox.Size = UDim2.new(0, 90, 0, 30)
-    jumpBox.BackgroundColor3 = Color3.fromRGB(40,80,40)
+    jumpBox.BackgroundColor3 = Color3.fromRGB(255,0,0)
     jumpBox.TextColor3 = Color3.fromRGB(255,255,255)
     jumpBox.Font = Enum.Font.GothamBold
     jumpBox.TextSize = 13
@@ -922,7 +922,7 @@ end)())
 makeRow("Poderes", "Kill All:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 160, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 14
@@ -1050,7 +1050,7 @@ makeRow("Poderes", "TP Player:", (function()
     frame.BackgroundTransparency = 1
     local tpPlayerBox = Instance.new("TextBox")
     tpPlayerBox.Size = UDim2.new(0, 100, 0, 30)
-    tpPlayerBox.BackgroundColor3 = Color3.fromRGB(80,80,180)
+    tpPlayerBox.BackgroundColor3 = Color3.fromRGB(255,0,0)
     tpPlayerBox.TextColor3 = Color3.fromRGB(255,255,255)
     tpPlayerBox.Font = Enum.Font.GothamBold
     tpPlayerBox.TextSize = 13
@@ -1061,7 +1061,7 @@ makeRow("Poderes", "TP Player:", (function()
     local tpPlayerBtn = Instance.new("TextButton")
     tpPlayerBtn.Size = UDim2.new(0, 68, 0, 30)
     tpPlayerBtn.Position = UDim2.new(0, 110, 0, 0)
-    tpPlayerBtn.BackgroundColor3 = Color3.fromRGB(100,100,255)
+    tpPlayerBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     tpPlayerBtn.TextColor3 = Color3.fromRGB(255,255,255)
     tpPlayerBtn.Font = Enum.Font.GothamBold
     tpPlayerBtn.TextSize = 13
@@ -1081,7 +1081,7 @@ makeRow("Poderes", "Kill Player:", (function()
     frame.BackgroundTransparency = 1
     local killBox = Instance.new("TextBox")
     killBox.Size = UDim2.new(0, 100, 0, 30)
-    killBox.BackgroundColor3 = Color3.fromRGB(220,60,60)
+    killBox.BackgroundColor3 = Color3.fromRGB(255,5,5)
     killBox.TextColor3 = Color3.fromRGB(255,255,255)
     killBox.Font = Enum.Font.GothamBold
     killBox.TextSize = 13
@@ -1092,7 +1092,7 @@ makeRow("Poderes", "Kill Player:", (function()
     local killBtn = Instance.new("TextButton")
     killBtn.Size = UDim2.new(0, 90, 0, 30)
     killBtn.Position = UDim2.new(0, 110, 0, 0)
-    killBtn.BackgroundColor3 = Color3.fromRGB(220,50,50)
+    killBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     killBtn.TextColor3 = Color3.fromRGB(255,255,255)
     killBtn.Font = Enum.Font.GothamBold
     killBtn.TextSize = 13
@@ -1225,7 +1225,7 @@ end
 makeRow("Poderes", "TP Lobby:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 180, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(150,150,50)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 15
@@ -1287,7 +1287,7 @@ end
 makeRow("Poderes", "TP Mapa:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 180, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(80,220,100)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 15
