@@ -1,11 +1,52 @@
 -- kakauHub - Funções em coluna + Kill Player + Todas as funções organizadas
-function AtualizarCor(botao, ativo)
-    if ativo then
-        botao.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Verde para ativado
-    else
-        botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para desativado
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+local settingsData = { hubTheme = "escuro", confirmOnClose = false }
+local function saveSettings()
+    local folder = PlayerGui:FindFirstChild("kakauHubSettings") or Instance.new("Folder", PlayerGui)
+    folder.Name = "kakauHubSettings"
+    for k, v in pairs(settingsData) do
+        local vObj = folder:FindFirstChild(k) or Instance.new("StringValue", folder)
+        vObj.Name = k
+        vObj.Value = tostring(v)
     end
 end
+local function loadSettings()
+    local folder = PlayerGui:FindFirstChild("kakauHubSettings")
+    if not folder then return end
+    for _, vObj in ipairs(folder:GetChildren()) do
+        if vObj.Name == "confirmOnClose" then
+            settingsData.confirmOnClose = (vObj.Value == "true")
+        elseif vObj.Name == "hubTheme" then
+            settingsData.hubTheme = "escuro"
+        end
+    end
+end
+loadSettings()
+
+local normalSize = UDim2.new(0.6, 0, 0.62, 0)
+local normalPos  = UDim2.new(0.5, 0, 0.48, 0)
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "kakauHub"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.DisplayOrder = 999
+ScreenGui.Parent = PlayerGui
+
+local function addCorner(instance, radius)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, radius)
+    corner.Parent = instance
+end
+
 local function criarDropdownPlayer()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 200, 0, 34)
@@ -61,53 +102,6 @@ local function criarDropdownPlayer()
     game:GetService("Players").PlayerRemoving:Connect(atualizarLista)
 
     return frame
-end
-
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local Lighting = game:GetService("Lighting")
-local player = Players.LocalPlayer
-local PlayerGui = player:WaitForChild("PlayerGui")
-
-local settingsData = { hubTheme = "escuro", confirmOnClose = false }
-local function saveSettings()
-    local folder = PlayerGui:FindFirstChild("kakauHubSettings") or Instance.new("Folder", PlayerGui)
-    folder.Name = "kakauHubSettings"
-    for k, v in pairs(settingsData) do
-        local vObj = folder:FindFirstChild(k) or Instance.new("StringValue", folder)
-        vObj.Name = k
-        vObj.Value = tostring(v)
-    end
-end
-local function loadSettings()
-    local folder = PlayerGui:FindFirstChild("kakauHubSettings")
-    if not folder then return end
-    for _, vObj in ipairs(folder:GetChildren()) do
-        if vObj.Name == "confirmOnClose" then
-            settingsData.confirmOnClose = (vObj.Value == "true")
-        elseif vObj.Name == "hubTheme" then
-            settingsData.hubTheme = "escuro"
-        end
-    end
-end
-loadSettings()
-
-local normalSize = UDim2.new(0.6, 0, 0.62, 0)
-local normalPos  = UDim2.new(0.5, 0, 0.48, 0)
-
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "kakauHub"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.IgnoreGuiInset = true
-ScreenGui.DisplayOrder = 999
-ScreenGui.Parent = PlayerGui
-
-local function addCorner(instance, radius)
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, radius)
-    corner.Parent = instance
 end
 
 local TabFrames = {}
@@ -1189,12 +1183,11 @@ makeRow("Poderes", "TP Player:", (function()
 end)())
 
 -- Kill Player (nova função)
-local dropdownPlayer = criarDropdownPlayer()
-makeRow("Poderes", "Kill Player:", dropdownPlayer)
+makeRow("Poderes", "Kill Player:",(function()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 220, 0, 34)
     frame.BackgroundTransparency = 1
-    local killBox = Instance.new("criarDropdownPlayer")
+    local killBox = Instance.new("criarDropdownPlayer()")
     killBox.Size = UDim2.new(0, 100, 0, 30)
     killBox.BackgroundColor3 = Color3.fromRGB(255,5,5)
     killBox.TextColor3 = Color3.fromRGB(255,255,255)
