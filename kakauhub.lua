@@ -368,8 +368,7 @@ end
 local function criarBotao(text, cor, txtOn, txtOff, getState, setState)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 150, 0, 32)
-    btn.BackgroundColor3 = cor
-    btn.BackgroundTransparency = 0.2
+    AtualizarCor(btn, getState()) -- Define a cor ao criar o botão
     btn.Text = getState() and txtOn or txtOff
     btn.Font = Enum.Font.GothamBold
     btn.TextColor3 = Color3.fromRGB(255,255,255)
@@ -377,6 +376,7 @@ local function criarBotao(text, cor, txtOn, txtOff, getState, setState)
     addCorner(btn, 8)
     btn.MouseButton1Click:Connect(function()
         setState(not getState())
+        AtualizarCor(btn, getState()) -- Atualiza a cor quando clicado
         btn.Text = getState() and txtOn or txtOff
     end)
     return btn
@@ -385,7 +385,6 @@ end
 local visuais = {
     {
         nome = "Night Vision:",
-        AtualizarCor(btn, getState()) -- Define a cor ao criar o botão
         cor = Color3.fromRGB(255,0,0),
         txtOff = "Night Vision",
         txtOn = "Normal Vision",
