@@ -8,8 +8,8 @@ local Lighting = game:GetService("Lighting")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
-local function AtualizarCor(botao, ativo)
-    if ativo then
+local function AtualizarCor(botao, true)
+    if true then
         botao.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Verde para ativado
     else
         botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para desativado
