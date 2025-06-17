@@ -1358,5 +1358,49 @@ pcall(function()
     })
 end)
 
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 80, 1, 0)
+fpsLabel.Position = UDim2.new(1, -90, 0, 0) -- Ajustado para ficar ao lado do título
+fpsLabel.BackgroundTransparency = 1
+fpsLabel.Font = Enum.Font.GothamBold
+fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- Verde vibrante para destaque
+fpsLabel.TextSize = 18
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Right
+fpsLabel.Parent = TopBar
+
+local function updateFPS()
+    local lastTime = tick()
+    local fpsCounter = 0
+    RunService.RenderStepped:Connect(function()
+        fpsCounter = fpsCounter + 1
+        if tick() - lastTime >= 1 then
+            fpsLabel.Text = "FPS: " .. fpsCounter
+            fpsCounter = 0
+            lastTime = tick()
+        end
+    end)
+end
+
+local pingLabel = Instance.new("TextLabel")
+pingLabel.Size = UDim2.new(0, 80, 1, 0)
+pingLabel.Position = UDim2.new(1, -180, 0, 0) -- Ajustado para ficar ao lado do FPS
+pingLabel.BackgroundTransparency = 1
+pingLabel.Font = Enum.Font.GothamBold
+pingLabel.TextColor3 = Color3.fromRGB(0, 200, 255) -- Azul para contraste
+pingLabel.TextSize = 18
+pingLabel.TextXAlignment = Enum.TextXAlignment.Right
+pingLabel.Parent = TopBar
+
+local function updatePing()
+    while true do
+        local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+        pingLabel.Text = "Ping: " .. ping .. "ms"
+        task.wait(1) -- Atualiza a cada segundo
+    end
+end
+
+updateFPS()
+task.spawn(updatePing)
+
 task.wait(0.1)
 animateOpen()
