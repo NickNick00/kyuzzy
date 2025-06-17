@@ -377,7 +377,7 @@ end
 local visuais = {
     {
         nome = "Night Vision:",
-        cor = Color3.fromRGB(70,70,70),
+        cor = Color3.fromRGB(255,0,0),
         txtOff = "Night Vision",
         txtOn = "Normal Vision",
         getState = function() return nightActive end,
@@ -385,7 +385,7 @@ local visuais = {
     },
     {
         nome = "Sem Névoa:",
-        cor = Color3.fromRGB(70,120,180),
+        cor = Color3.fromRGB(255,0,0),
         txtOff = "Remover Névoa",
         txtOn = "Restaurar Névoa",
         getState = function() return fogActive end,
@@ -393,7 +393,7 @@ local visuais = {
     },
     {
         nome = "Xray Inimigos:",
-        cor = Color3.fromRGB(40,40,40),
+        cor = Color3.fromRGB(255,0,0),
         txtOff = "Ativar Xray Inimigos",
         txtOn = "Desativar Xray Inimigos",
         getState = function() return xrayEnemiesActive end,
@@ -487,7 +487,7 @@ end
 makeRow("Poderes", "Bloquear BleakGun:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 150, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(180, 60, 60)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 15
@@ -521,7 +521,7 @@ end)())
 makeRow("Poderes", "Kill Aura MM2:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 150, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+    btn.BackgroundColor3 = Color3.fromRGB(220, 0, 0)
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 15
@@ -680,7 +680,7 @@ end
 makeRow("Poderes", "Fling All:", (function()
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 150, 0, 32)
-    btn.BackgroundColor3 = Color3.fromRGB(255,140,0)
+    btn.BackgroundColor3 = Color3.fromRGB(255,0 ,0)
     btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.GothamBold
     btn.TextSize = 15
@@ -828,13 +828,13 @@ end
 
 -- Cada função em uma linha (funções em coluna)
 makeRow("Poderes", "God (Imortal):",
-    criarBotao("God", Color3.fromRGB(60,200,60), "Desativar God", "Ativar God", function() return godActive end, function(v) godActive = v; setGod(v) end)
+    criarBotao("God", Color3.fromRGB(255,0 , 0), "Desativar God", "Ativar God", function() return godActive end, function(v) godActive = v; setGod(v) end)
 )
 makeRow("Poderes", "Noclip:",
-    criarBotao("Noclip", Color3.fromRGB(180,120,255), "Desativar Noclip", "Ativar Noclip", function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
+    criarBotao("Noclip", Color3.fromRGB(255,0,0), "Desativar Noclip", "Ativar Noclip", function() return noclipActive end, function(v) noclipActive = v; setNoclip(v) end)
 )
 makeRow("Poderes", "Fly (InfiniteYield):",
-    criarBotao("Fly", Color3.fromRGB(60,60,160), "Desativar Fly", "Ativar Fly", function() return flyActive end, function(v) flyActive = v; if v then startFly() else stopFly() end end)
+    criarBotao("Fly", Color3.fromRGB(255,0,0), "Desativar Fly", "Ativar Fly", function() return flyActive end, function(v) flyActive = v; if v then startFly() else stopFly() end end)
 )
 
 makeRow("Poderes", "Velocidade:", (function()
@@ -904,7 +904,7 @@ makeRow("Poderes", "Pulo:", (function()
     local jumpResetBtn = Instance.new("TextButton")
     jumpResetBtn.Size = UDim2.new(0, 68, 0, 30)
     jumpResetBtn.Position = UDim2.new(0, 100, 0, 0)
-    jumpResetBtn.BackgroundColor3 = Color3.fromRGB(120,255,120)
+    jumpResetBtn.BackgroundColor3 = Color3.fromRGB(255,0,0)
     jumpResetBtn.TextColor3 = Color3.fromRGB(255,255,255)
     jumpResetBtn.Font = Enum.Font.GothamBold
     jumpResetBtn.TextSize = 13
