@@ -1189,7 +1189,8 @@ makeRow("Poderes", "TP Player:", (function()
 end)())
 
 -- Kill Player (nova função)
-makeRow("Poderes", "Kill Player:", (function()
+local dropdownPlayer = criarDropdownPlayer()
+makeRow("Poderes", "Kill Player:", dropdownPlayer)
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 220, 0, 34)
     frame.BackgroundTransparency = 1
