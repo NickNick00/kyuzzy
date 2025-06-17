@@ -1,4 +1,12 @@
 -- kakauHub - Funções em coluna + Kill Player + Todas as funções organizadas
+function AtualizarCor(botao, ativo)
+    if ativo then
+        botao.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Verde para ativado
+    else
+        botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para desativado
+    end
+end
+
 
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
@@ -7,14 +15,6 @@ local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
-
-local function AtualizarCor(botao, true)
-    if true then
-        botao.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Verde para ativado
-    else
-        botao.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para desativado
-    end
-end
 
 local settingsData = { hubTheme = "escuro", confirmOnClose = false }
 local function saveSettings()
